@@ -6,7 +6,7 @@ import {Meteor} from 'meteor/meteor';
 import {Accounts} from 'meteor/accounts-base';
 import {ServiceConfiguration} from 'meteor/service-configuration';
 
-const OAuth2Service = {};
+export const OAuth2Service = {};
 OAuth2Service.name = 'OAuth2Service';
 
 Accounts.oauth.registerService(OAuth2Service.name);
@@ -25,4 +25,20 @@ if (Meteor.isClient) {
   });
 }
 
-export default OAuth2Service;
+export const checkConfig = (config) => {
+  if (!config) {
+    throw new ServiceConfiguration.ConfigError(OAuth2Service.name);
+  }
+  if (!config.loginUrl) {
+    throw new Error('Service found but it does not have a loginUrl configured.');
+  }
+  if (!config.tokenUrl) {
+    throw new Error('Service found but it does not have a tokenUrl configured.');
+  }
+  if (!config.infoUrl) {
+    throw new Error('Service found but it does not have a infoUrl configured.');
+  }
+  if (!config.loginStyle || (config.loginStyle !== 'popup' && config.loginStyle !== 'redirect')) {
+    throw new Error('Service found but loginStyle can only be "popup" or "redirect".');
+  }
+};

@@ -8,7 +8,7 @@ import {ServiceConfiguration} from 'meteor/service-configuration';
 import {OAuth} from 'meteor/oauth';
 import {Random} from 'meteor/random';
 
-import OAuth2Service from '../imports/common';
+import {OAuth2Service, checkConfig} from '../imports/common';
 
 OAuth2Service.requestCredential = function (options, credentialRequestCompleteCallback) {
   if (!credentialRequestCompleteCallback && typeof options === 'function') {
@@ -22,25 +22,7 @@ OAuth2Service.requestCredential = function (options, credentialRequestCompleteCa
     service: OAuth2Service.name
   });
 
-  if (!config) {
-    credentialRequestCompleteCallback
-    && credentialRequestCompleteCallback(new ServiceConfiguration.ConfigError(OAuth2Service.name));
-    return;
-  }
-
-  if (!config.baseUrl) {
-    credentialRequestCompleteCallback
-    && credentialRequestCompleteCallback(
-      ServiceConfiguration.ConfigError('Service found but it does not have a baseUrl configured.')
-    );
-  }
-
-  if (!config.loginUrl) {
-    credentialRequestCompleteCallback
-    && credentialRequestCompleteCallback(
-      ServiceConfiguration.ConfigError('Service found but it does not have a loginUrl configured.')
-    );
-  }
+  checkConfig(config);
 
   const credentialToken = Random.secret();
 
@@ -53,12 +35,14 @@ OAuth2Service.requestCredential = function (options, credentialRequestCompleteCa
 
   let loginStyle = OAuth._loginStyle(OAuth2Service.name, config, options);
 
-  const loginUrl = config.loginUrl +
-    '?response_type=code' +
-    '&client_id=' + config.clientId +
-    '&redirect_uri=' + OAuth._redirectUri(OAuth2Service.name, config) +
-    '&scope=' + scope.join(' ') +
-    '&state=' + OAuth._stateParam(loginStyle, credentialToken);
+  const loginUrl = [
+    `${config.loginUrl}?`,
+    'response_type=code',
+    `&client_id=${config.clientId}`,
+    `&redirect_uri=${OAuth._redirectUri(OAuth2Service.name, config)}`,
+    `&scope=${scope.join(' ')}`,
+    `&state=${OAuth._stateParam(loginStyle, credentialToken)}`
+  ].join('');
 
   OAuth.launchLogin({
     loginService: OAuth2Service.name,

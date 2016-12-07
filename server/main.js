@@ -6,31 +6,20 @@ import {OAuth} from 'meteor/oauth';
 import {ServiceConfiguration} from 'meteor/service-configuration';
 import {HTTP} from 'meteor/http';
 
-import OAuth2Service from '../imports/common';
+import {OAuth2Service, checkConfig} from '../imports/common';
 
 OAuth.registerService(OAuth2Service.name, 2, null, function (query) {
   const config = ServiceConfiguration.configurations.findOne({
     service: OAuth2Service.name
   });
-
-  if (!config) {
-    throw new ServiceConfiguration.ConfigError(OAuth2Service.name);
-  }
-
-  if (!config.baseUrl) {
-    throw new ServiceConfiguration.ConfigError('Service found but it does not have a baseUrl configured.');
-  }
-
-  if (!config.loginUrl) {
-    throw new ServiceConfiguration.ConfigError('Service found but it does not have a loginUrl configured.');
-  }
+  checkConfig(config);
 
   const response = getTokenResponse(query, config);
   const accessToken = response.accessToken;
   const userInfo = JSON.parse(getIdentity(accessToken, config));
 
   const serviceData = {
-    id: userInfo.id,
+    id: userInfo[config.idProp || 'id'],
     accessToken: accessToken,
     expiresAt: (+new Date) + (1000 * response.expiresIn),
     identity: userInfo,
@@ -60,7 +49,7 @@ function getTokenResponse(query, config) {
   let responseContent;
   try {
     responseContent = HTTP.post(
-      config.baseUrl + '/oauth/token',
+      config.tokenUrl,
       {
         params: {
           grant_type: 'authorization_code',
@@ -96,10 +85,9 @@ function getTokenResponse(query, config) {
 }
 
 function getIdentity(accessToken, config) {
-  const fetchUrl = config.baseUrl + '/account';
   try {
     const identity = HTTP.get(
-      fetchUrl,
+      config.infoUrl,
       {
         params: {
           access_token: accessToken
@@ -108,7 +96,7 @@ function getIdentity(accessToken, config) {
     );
     return identity.content;
   } catch (err) {
-    throw new Error('Failed to fetch identity from ' + fetchUrl + '. ' + err.message);
+    throw new Error('Failed to fetch identity from ' + config.infoUrl + '. ' + err.message);
   }
 }
 

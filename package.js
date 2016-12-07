@@ -2,21 +2,21 @@ Package.describe({
   name: 'charlesoy:oauthyc-client',
   version: '0.0.1',
   // Brief, one-line summary of the package.
-  summary: 'A OAuth2 client implementation package which allows user to configure the detailes.',
+  summary: 'A OAuth2 client implementation package which allows user to configure the details.',
   // URL to the Git repository containing the source code for this package.
-  git: '',
+  git: 'https://github.com/CharlesOy/oauthyc-client',
   // By default, Meteor will default to using README.md for documentation.
   // To avoid submitting documentation, set this field to null.
   documentation: 'README.md'
 });
 
+Npm.depends({
+  lodash: '4.17.2',
+});
+
 Package.onUse(function (api) {
   api.versionsFrom('1.4.2.3');
   api.use('ecmascript');
-
-  Npm.depends({
-    lodash: '4.17.2',
-  });
 
   api.use([
     'accounts-base',
@@ -27,7 +27,7 @@ Package.onUse(function (api) {
     'service-configuration',
   ], [
     'client',
-    'server'
+    'server',
   ]);
 
   api.use('random', 'client');
