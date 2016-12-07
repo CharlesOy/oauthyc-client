@@ -6,13 +6,7 @@ A OAuth2 client implementation package which allows user to configure the detail
 
 ### Documentation
 
-#### Usage
-
-Configure on your oauth2 server, note that redirect_url must be.
-
-```bash
-http://your.domain/_oauth/OAuthService
-```
+#### Installation
 
 Install the package.
 
@@ -24,6 +18,14 @@ Use [service-configuration][1] package to do the configuration.
 
 ```bash
 $ meteor add service-configuration
+```
+
+#### Configuration
+
+Configure on your oauth2 server, note that redirect_url must be.
+
+```bash
+http://your.domain/_oauth/OAuthService
 ```
 
 configure the details in some server file (eg. accounts.js).
@@ -46,7 +48,9 @@ ServiceConfiguration.configurations.insert({
 });
 ```
 
-Usage in client code, if you are not logged in, code below will force you going to your oauth2 server for authentication. 
+#### Usage
+
+Put these code into some client file, if you are not logged in, it will force you going to your oauth2 server for authentication. 
 
 ```javascript
 import {Meteor} from 'meteor/meteor';
