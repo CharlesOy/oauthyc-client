@@ -18,10 +18,10 @@ OAuth2Service.requestCredential = function (options, credentialRequestCompleteCa
 
   // if Meteor.isClient is true,
   // service config is available only in this function(OAuth2Service.requestCredential)
+  console.log(ServiceConfiguration.configurations.find({}).fetch());
   const config = ServiceConfiguration.configurations.findOne({
-    service: OAuth2Service.name
+    service: OAuth2Service.name,
   });
-
   checkConfig(config);
 
   const credentialToken = Random.secret();
@@ -31,7 +31,6 @@ OAuth2Service.requestCredential = function (options, credentialRequestCompleteCa
   if (options.scope)
     scope = options.scope;
   scope = _.union(scope, requiredScope);
-
 
   let loginStyle = OAuth._loginStyle(OAuth2Service.name, config, options);
 

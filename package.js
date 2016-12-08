@@ -1,12 +1,8 @@
 Package.describe({
   name: 'charlesoy:oauthyc-client',
   version: '0.0.1',
-  // Brief, one-line summary of the package.
-  summary: 'A OAuth2 client implementation package which allows user to configure the details.',
-  // URL to the Git repository containing the source code for this package.
+  summary: 'A OAuth2 client implementation Meteor package which allows user to configure the details.',
   git: 'https://github.com/CharlesOy/oauthyc-client',
-  // By default, Meteor will default to using README.md for documentation.
-  // To avoid submitting documentation, set this field to null.
   documentation: 'README.md'
 });
 

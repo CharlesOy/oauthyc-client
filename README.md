@@ -2,7 +2,7 @@
 
 ### Description
 
-A OAuth2 client implementation package which allows user to configure the details.
+A OAuth2 client implementation Meteor package which allows user to configure the details.
 
 ### Documentation
 
@@ -22,7 +22,7 @@ $ meteor add service-configuration
 
 #### Configuration
 
-Configure on your oauth2 server, note that redirect_url must be.
+Configure on your oauth2 server, note that redirect_url path must be '/_oauth/OAuthService'.
 
 ```bash
 http://your.domain/_oauth/OAuthService
@@ -59,10 +59,10 @@ import 'meteor/charlesoy:oauthyc-client';
 
 // ...
 
-if (Accounts.loginServicesConfigured() || !Meteor.user()) {
+if (Accounts.loginServicesConfigured() && !Meteor.user()) {
   const loginWithService = Meteor[`loginWith${Accounts.oauth.serviceNames()[0]}`];
   loginWithService({}, function (err) {
-    // deal with the error
+    // handle the error
   });
 }
 ```
