@@ -2,11 +2,26 @@
  * Created by ouyangcharles on 2016/12/07.
  */
 
+import {Meteor} from 'meteor/meteor';
 import {OAuth} from 'meteor/oauth';
 import {ServiceConfiguration} from 'meteor/service-configuration';
 import {HTTP} from 'meteor/http';
 
 import {OAuth2Service, checkConfig} from '../imports/common';
+import {Picker} from 'meteor/meteorhacks:picker';
+
+Picker.route(`/${OAuth2Service.name}/logout/:token`, (params, req, res) => {
+  Meteor.users.update({
+    [`services.${OAuth2Service.name}.accessToken`]: params.token,
+  }, {
+    $set: {
+      'services.resume.loginTokens': [],
+    },
+  }, {
+    multi: true,
+  });
+  res.end(params.token);
+});
 
 OAuth.registerService(OAuth2Service.name, 2, null, function (query) {
   const config = ServiceConfiguration.configurations.findOne({

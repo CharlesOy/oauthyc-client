@@ -16,9 +16,7 @@ $ meteor add charlesoy:oauthyc-client
 
 Use [service-configuration][1] package to do the configuration.
 
-```bash
-$ meteor add service-configuration
-```
+There is no need to import service-configuration explicitly for it has already been imported in charlesoy:oauthyc-client.
 
 #### Configuration
 

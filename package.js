@@ -15,11 +15,13 @@ Package.onUse(function (api) {
   api.use('ecmascript');
 
   api.use([
+    'meteor-base',
     'accounts-base',
     'accounts-oauth',
     'oauth',
     'oauth2',
     'http',
+    'meteorhacks:picker',
     'service-configuration',
   ], [
     'client',
@@ -30,7 +32,6 @@ Package.onUse(function (api) {
 
   api.mainModule('server/main.js', 'server');
   api.mainModule('client/main.js', 'client');
-
 });
 
 Package.onTest(function (api) {
