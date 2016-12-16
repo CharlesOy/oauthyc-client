@@ -38,7 +38,8 @@ export const checkConfig = (config) => {
   if (!config.infoUrl) {
     throw new Error('Service found but it does not have a infoUrl configured.');
   }
-  if (!config.loginStyle || (config.loginStyle !== 'popup' && config.loginStyle !== 'redirect')) {
-    throw new Error('Service found but loginStyle can only be "popup" or "redirect".');
+  config.loginStyle = config.loginStyle || 'redirect';
+  if (config.loginStyle !== 'popup' && config.loginStyle !== 'redirect') {
+    throw new Error('LoginStyle can only be "popup" or "redirect".');
   }
 };

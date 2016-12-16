@@ -41,7 +41,7 @@ ServiceConfiguration.configurations.insert({
   loginUrl: '${your oauth2 authentication URL}',
   tokenUrl: '${where the oauth2 client gets token}',
   infoUrl: '${where the oauth2 client gets user information}',
-  loginStyle: 'redirect', // can only be 'redirect' or 'popup'
+  loginStyle: 'redirect', // can only be 'redirect' or 'popup', by default, it is 'redirect'
   idProp: 'id', // by default, 'id' will be used
 });
 ```
