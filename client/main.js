@@ -3,7 +3,6 @@
  */
 
 import _ from 'lodash';
-import winston from 'winston';
 
 import {ServiceConfiguration} from 'meteor/service-configuration';
 import {OAuth} from 'meteor/oauth';
@@ -20,7 +19,6 @@ OAuth2Service.requestCredential = function (options, credentialRequestCompleteCa
   // if Meteor.isClient is true,
   // service config is available only in this function(OAuth2Service.requestCredential)
 
-  winston.info(ServiceConfiguration.configurations.find({}).fetch());
   const config = ServiceConfiguration.configurations.findOne({
     service: OAuth2Service.name,
   });
