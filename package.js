@@ -16,20 +16,18 @@ Package.onUse(function (api) {
   api.use('ecmascript');
 
   api.use([
-    'meteor-base',
-    'accounts-base',
-    'accounts-oauth',
-    'oauth',
-    'oauth2',
-    'http',
-    'meteorhacks:picker',
-    'service-configuration',
+    'accounts-oauth@1.1.15',
+    'oauth@1.1.12',
+    'oauth2@1.1.11',
+    'http@1.2.10',
+    'meteorhacks:picker@1.0.3',
+    'service-configuration@1.0.11',
   ], [
     'client',
     'server',
   ]);
 
-  api.use('random', 'client');
+  api.use('random@1.0.10', 'client');
 
   api.mainModule('server/main.js', 'server');
   api.mainModule('client/main.js', 'client');

@@ -4,6 +4,8 @@
 
 A OAuth2 client implementation Meteor package which allows user to configure the details.
 
+**Note that this package doesn't support scope configuration for now**.
+
 ### Documentation
 
 #### Installation
