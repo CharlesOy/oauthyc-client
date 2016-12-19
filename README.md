@@ -16,31 +16,34 @@ $ meteor add charlesoy:oauthyc-client
 
 Use [service-configuration][1] package to do the configuration.
 
-There is no need to import service-configuration explicitly for it has already been imported in charlesoy:oauthyc-client.
+There is no need to add package service-configuration explicitly for it has already been added in charlesoy:oauthyc-client.
 
 #### Configuration
 
-Configure on your oauth2 server, note that redirect_url path must be '/_oauth/OAuthService'.
+Configure on your oauth2 server, **note that redirect_url path must be '/_oauth/OAuthService'**.
 
 ```bash
 http://your.domain/_oauth/OAuthService
 ```
 
-configure the details in some server file (eg. accounts.js).
+configure the details in some server file on your oauth2 client side(eg. accounts.js).
 
 ```javascript
+import {ServiceConfiguration} from 'meteor/service-configuration';
+import OAuthService from 'meteor/charlesoy:oauthyc-client';
+
 ServiceConfiguration.configurations.remove({
   service: OAuthService.name,
 });
 
 ServiceConfiguration.configurations.insert({
   service: OAuthService.name,
-  clientId: '${your oauth2 id}',
+  clientId: 'auth2 id string',
   scope: [], // oauth2 scopes you ask.
-  secret: '${your oauth2 secret}',
-  loginUrl: '${your oauth2 authentication URL}',
-  tokenUrl: '${where the oauth2 client gets token}',
-  infoUrl: '${where the oauth2 client gets user information}',
+  secret: 'oauth2 secret string',
+  loginUrl: 'http://your/oauth2/authentication/URL',
+  tokenUrl: 'http://where/the/oauth2/client/gets/token',
+  infoUrl: 'http://where/the/oauth2/client/gets/user/information',
   loginStyle: 'redirect', // can only be 'redirect' or 'popup', by default, it is 'redirect'
   idProp: 'id', // by default, 'id' will be used
 });
