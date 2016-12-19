@@ -20,7 +20,7 @@ There is no need to add package service-configuration explicitly for it has alre
 
 #### Configuration
 
-Configure on your oauth2 server, **note that redirect_url path must be '/_oauth/OAuthService'**.
+Configure on your oauth2 server, **note that redirect_uri path must be 'http<span></span>://.../_oauth/OAuthService'**.
 
 ```bash
 http://your.domain/_oauth/OAuthService
