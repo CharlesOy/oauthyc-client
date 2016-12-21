@@ -1,6 +1,6 @@
 Package.describe({
   name: 'charlesoy:oauthyc-client',
-  version: '0.0.1',
+  version: '1.0.0',
   summary: 'A OAuth2 client implementation Meteor package which allows user to configure the details.',
   git: 'https://github.com/CharlesOy/oauthyc-client',
   documentation: 'README.md'

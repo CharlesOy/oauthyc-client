@@ -40,6 +40,6 @@ export const checkConfig = (config) => {
   }
   config.loginStyle = config.loginStyle || 'redirect';
   if (config.loginStyle !== 'popup' && config.loginStyle !== 'redirect') {
-    throw new Error('LoginStyle can only be "popup" or "redirect".');
+    throw new Error('loginStyle can only be "popup" or "redirect".');
   }
 };

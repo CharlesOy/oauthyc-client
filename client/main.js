@@ -4,6 +4,7 @@
 
 import _ from 'lodash';
 
+import {Meteor} from 'meteor/meteor';
 import {ServiceConfiguration} from 'meteor/service-configuration';
 import {OAuth} from 'meteor/oauth';
 import {Random} from 'meteor/random';
@@ -51,4 +52,8 @@ OAuth2Service.requestCredential = function (options, credentialRequestCompleteCa
     credentialToken: credentialToken,
     popupOptions: {height: 600}
   });
+};
+
+export const logoutAll = () => {
+  Meteor.call('oauthyc.logoutAll');
 };

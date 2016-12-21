@@ -2,9 +2,9 @@
 
 ### Description
 
-A OAuth2 client implementation Meteor package which allows user to configure the details.
+A OAuth2 Client implementation Meteor package with single-sign-on & single-sign-out.
 
-**Note that this package doesn't support scope configuration for now**.
+**Single-sign-out** is supported if your OAuth2 Server is using [charlesoy:oauthyc-server][1] and all your OAuth2 Clients are using charlesoy:oauthyc-client.
 
 ### Documentation
 
@@ -16,49 +16,53 @@ Install the package.
 $ meteor add charlesoy:oauthyc-client
 ```
 
-Use [service-configuration][1] package to do the configuration.
+#### Configure OAuth2 Server
 
-There is no need to add package service-configuration explicitly for it has already been added in charlesoy:oauthyc-client.
-
-#### Configuration
-
-Configure on your oauth2 server, **note that redirect_uri path must be 'http<span></span>://.../_oauth/OAuthService'**.
+Configure on your oauth2 server, **note that redirectUrl path must be 'http<span></span>://.../_oauth/OAuthService'**.
 
 ```bash
-http://your.domain/_oauth/OAuthService
+import {configOAuth2} from 'meteor/charlesoy:oauthyc-server';
+
+configOAuth2({
+  service: 'OAuth2Service',
+  clientId: 'EFyn3MxgPWJpzgrj4',
+  clientSecret: 'D4_coHrw96QJjeMVqNRYA0BzmsOVCNLM6Vp4tdjkJOU',
+  redirectUrl: 'http://localhost:3000/_oauth/OAuth2Service',
+
+  // OPTIONAL
+  singleSignOut: false, // false by default.
+});
 ```
+
+#### Configure OAuth2 Client
 
 configure the details in some server file on your oauth2 client side(eg. accounts.js).
 
+Here is an example.
+
 ```javascript
-import {ServiceConfiguration} from 'meteor/service-configuration';
-import OAuthService from 'meteor/charlesoy:oauthyc-client';
+import {configOAuthyc} from 'meteor/charlesoy:oauthyc-client';
 
-ServiceConfiguration.configurations.remove({
-  service: OAuthService.name,
-});
+configOAuthyc({
+  clientId: 'EFyn3MxgPWJpzgrj4',
+  secret: 'D4_coHrw96QJjeMVqNRYA0BzmsOVCNLM6Vp4tdjkJOU',
+  loginUrl: 'http://localhost:3100/oauth/authorize',
+  tokenUrl: 'http://localhost:3100/oauth/token',
+  infoUrl: 'http://localhost:3100/account',
 
-ServiceConfiguration.configurations.insert({
-  service: OAuthService.name,
-  clientId: 'auth2 id string',
-  scope: [], // oauth2 scopes you ask.
-  secret: 'oauth2 secret string',
-  loginUrl: 'http://your/oauth2/authentication/URL',
-  tokenUrl: 'http://where/the/oauth2/client/gets/token',
-  infoUrl: 'http://where/the/oauth2/client/gets/user/information',
-  loginStyle: 'redirect', // can only be 'redirect' or 'popup', by default, it is 'redirect'
-  idProp: 'id', // by default, 'id' will be used
+  // OPTIONAL
+  loginStyle: 'redirect', // can only be 'redirect' or 'popup', by default, it's 'redirect'.
+  idProp: 'id', // by default, 'id' will be used.
 });
 ```
 
-#### Usage
+#### Authorization
 
-Put these code into some client file, if you are not logged in, it will force you going to your oauth2 server for authentication. 
+Put the code below into some client file, and if you are not logged in, it will force you going to your oauth2 server for authentication. 
 
 ```javascript
 import {Meteor} from 'meteor/meteor';
 import {Accounts} from 'meteor/accounts-base';
-import 'meteor/charlesoy:oauthyc-client';
 
 // ...
 
@@ -70,8 +74,22 @@ if (Accounts.loginServicesConfigured() && !Meteor.user()) {
 }
 ```
 
+#### Logout
+
+Call logoutAll() in client code (of OAuth2 Client Application) to sign out all applications registered on OAuth2 server.
+
+```javascript
+import {logoutAll} from 'meteor/charlesoy:oauthyc-client'; 
+
+// ...
+
+logoutAll();
+```
+
+Or if you don't want to use single-sign-out, just use ```Meteor.logout();```.
+
 ### Licence
 
 MIT
 
-[1]: https://atmospherejs.com/meteor/service-configuration
+[1]: https://atmospherejs.com/charlesoy/oauthyc-server

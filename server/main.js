@@ -4,30 +4,15 @@
 
 import winston from 'winston';
 
-import {Meteor} from 'meteor/meteor';
 import {OAuth} from 'meteor/oauth';
 import {ServiceConfiguration} from 'meteor/service-configuration';
 import {HTTP} from 'meteor/http';
 
 import {OAuth2Service, checkConfig} from '../imports/common';
-import {Picker} from 'meteor/meteorhacks:picker';
-
-Picker.route(`/${OAuth2Service.name}/logout/:token`, (params, req, res) => {
-  Meteor.users.update({
-    [`services.${OAuth2Service.name}.accessToken`]: params.token,
-  }, {
-    $set: {
-      'services.resume.loginTokens': [],
-    },
-  }, {
-    multi: true,
-  });
-  res.end(params.token);
-});
+import './singleSignOut';
 
 OAuth.registerService(OAuth2Service.name, 2, null, function (query) {
-  winston.level = 'debug';
-  winston.debug(query);
+  winston.info(query);
 
   const config = ServiceConfiguration.configurations.findOne({
     service: OAuth2Service.name
@@ -81,11 +66,11 @@ function getTokenResponse(query, config) {
       }
     ).content;
   } catch (err) {
-    throw new Error('Failed to complete OAuth handshake\n\n' + err.message);
+    throw new Error(`Failed to complete OAuth handshake ${err.message}`);
   }
 
   if (!isJSON(responseContent)) {
-    throw new Error('Failed to complete OAuth handshake' + responseContent);
+    throw new Error(`Failed to complete OAuth handshake ${responseContent}`);
   }
 
   const parsedResponse = JSON.parse(responseContent);
@@ -93,9 +78,7 @@ function getTokenResponse(query, config) {
   const expiresIn = parsedResponse.expires_in;
 
   if (!accessToken) {
-    throw new Error('Failed to complete OAuth handshake\n\
-      did not receive an oauth token.\n' + responseContent
-    );
+    throw new Error(`Failed to complete OAuth handshake did not receive an oauth token. ${responseContent}`);
   }
 
   return {
@@ -116,7 +99,7 @@ function getIdentity(accessToken, config) {
     );
     return identity.content;
   } catch (err) {
-    throw new Error('Failed to fetch identity from ' + config.infoUrl + '. ' + err.message);
+    throw new Error(`Failed to fetch identity from ${config.infoUrl}. ${err.message}`);
   }
 }
 
@@ -124,4 +107,12 @@ OAuth2Service.retrieveCredential = function (credentialToken, credentialSecret) 
   return OAuth.retrieveCredential(credentialToken, credentialSecret);
 };
 
-export default OAuth2Service;
+export const configOAuth2 = (config) => {
+  ServiceConfiguration.configurations.remove({
+    service: OAuth2Service.name,
+  });
+
+  ServiceConfiguration.configurations.insert(Object.assign({
+    service: OAuth2Service.name,
+  }, config));
+};
