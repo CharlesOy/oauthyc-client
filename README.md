@@ -2,7 +2,7 @@
 
 ### Description
 
-A OAuth2 Client implementation Meteor package with single-sign-on & single-sign-out.
+An OAuth2 Client implementation Meteor package with single-sign-on & single-sign-out.
 
 **Single-sign-out** is supported if your OAuth2 Server is using [charlesoy:oauthyc-server][1] and all your OAuth2 Clients are using charlesoy:oauthyc-client.
 
