@@ -18,7 +18,7 @@ $ meteor add charlesoy:oauthyc-client
 
 #### Configure OAuth2 Server
 
-Configure on your oauth2 server, **note that redirectUrl path must be 'http<span></span>://.../_oauth/OAuthService'**.
+First you need to configure your OAuth2 Server, Here is a demo. **note that redirectUrl path must be 'http<span></span>://.../_oauth/OAuthService'**.
 
 ```bash
 import {configOAuth2} from 'meteor/charlesoy:oauthyc-server';
@@ -28,17 +28,12 @@ configOAuth2({
   clientId: 'EFyn3MxgPWJpzgrj4',
   clientSecret: 'D4_coHrw96QJjeMVqNRYA0BzmsOVCNLM6Vp4tdjkJOU',
   redirectUrl: 'http://localhost:3000/_oauth/OAuth2Service',
-
-  // OPTIONAL
-  singleSignOut: false, // false by default.
 });
 ```
 
 #### Configure OAuth2 Client
 
-configure the details in some server file on your oauth2 client side(eg. accounts.js).
-
-Here is an example.
+configure the details in some server file on your Oauth2 Client side(eg. accounts.js).
 
 ```javascript
 import {configOAuthyc} from 'meteor/charlesoy:oauthyc-client';
