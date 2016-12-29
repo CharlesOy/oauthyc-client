@@ -39,6 +39,19 @@ Meteor.methods({
     if (!Meteor.user()) {
       return;
     }
+
+    // logout OAuth2 Server
+    Meteor.users.update({
+      _id: Meteor.user()._id,
+    }, {
+      $set: {
+        'services.resume.loginTokens': [],
+      },
+    }, {
+      multi: true,
+    });
+
+    // logout all OAuth Clients
     const {
       services:{
         [OAuth2Service.name]:{

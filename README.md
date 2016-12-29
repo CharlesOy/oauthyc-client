@@ -36,9 +36,9 @@ configOAuth2({
 configure the details in some server file on your Oauth2 Client side(eg. accounts.js).
 
 ```javascript
-import {configOAuthyc} from 'meteor/charlesoy:oauthyc-client';
+import {configOAuth2} from 'meteor/charlesoy:oauthyc-client';
 
-configOAuthyc({
+configOAuth2({
   clientId: 'EFyn3MxgPWJpzgrj4',
   secret: 'D4_coHrw96QJjeMVqNRYA0BzmsOVCNLM6Vp4tdjkJOU',
   loginUrl: 'http://localhost:3100/oauth/authorize',

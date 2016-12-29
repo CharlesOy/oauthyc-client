@@ -26,9 +26,12 @@ OAuth.registerService(OAuth2Service.name, 2, null, function (query) {
   const serviceData = {
     id: userInfo[config.idProp || 'id'],
     accessToken: accessToken,
+    _OAuthCustom: true,
     expiresAt: (+new Date) + (1000 * response.expiresIn),
     identity: userInfo,
   };
+
+  console.log(serviceData);
 
   return {
     serviceData: serviceData,
@@ -107,12 +110,13 @@ OAuth2Service.retrieveCredential = function (credentialToken, credentialSecret) 
   return OAuth.retrieveCredential(credentialToken, credentialSecret);
 };
 
-export const configOAuth2 = (config) => {
+export const configOAuth2 = (config, serviceName) => {
+  serviceName = serviceName || OAuth2Service.name;
   ServiceConfiguration.configurations.remove({
-    service: OAuth2Service.name,
+    service: serviceName,
   });
 
   ServiceConfiguration.configurations.insert(Object.assign({
-    service: OAuth2Service.name,
+    service: serviceName,
   }, config));
 };
